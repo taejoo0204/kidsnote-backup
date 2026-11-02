@@ -945,6 +945,9 @@ def main(argv: list[str] | None = None) -> int:
                     kind_label, pct, idx, total, xid, attach_str,
                 )
             except Exception as e:
+                response = getattr(e, "response", None)
+                if response is not None:
+                    _LOGGER.warning("Notion error detail: %s", response.text)
                 fail += 1
                 _LOGGER.warning(
                     "%s %5.1f%% (%d/%d) | Notion FAILED id=%d: %s",
