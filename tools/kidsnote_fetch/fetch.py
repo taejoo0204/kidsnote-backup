@@ -819,6 +819,7 @@ def main(argv: list[str] | None = None) -> int:
     )
 
     reports = _list_reports(sess, int(target["id"]))
+    reports = [r for r in reports if str(r.get("date_written") or r.get("created") or "")[:4] == "2026"]
     if args.monthly_sample:
         # One report per (YYYY-MM). Reports are newest-first so the first
         # seen per month is the latest of that month.
@@ -995,6 +996,7 @@ def main(argv: list[str] | None = None) -> int:
     if mirror is not None and not args.no_notices and center_id:
         try:
             notices = _list_notices(sess, int(center_id))
+            notices = [n for n in notices if str(n.get("date_written") or n.get("created") or "")[:4] == "2026"]
             if args.limit:
                 notices = notices[: args.limit]
             _LOGGER.info("fetched %d notices for center id=%s", len(notices), center_id)
@@ -1003,6 +1005,7 @@ def main(argv: list[str] | None = None) -> int:
     if mirror is not None and not args.no_albums:
         try:
             albums = _list_albums(sess, int(target["id"]))
+            albums = [a for a in albums if str(a.get("date_written") or a.get("created") or "")[:4] == "2026"]
             if args.limit:
                 albums = albums[: args.limit]
             _LOGGER.info("fetched %d albums for child id=%s", len(albums), target["id"])
